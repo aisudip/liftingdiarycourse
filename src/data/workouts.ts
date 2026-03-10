@@ -10,6 +10,13 @@ export async function getUserWorkouts(userId: string) {
   return db.select().from(workouts).where(eq(workouts.userId, userId));
 }
 
+export async function updateWorkout(userId: string, workoutId: number, name: string, startedAt: Date) {
+  return db
+    .update(workouts)
+    .set({ name, startedAt })
+    .where(and(eq(workouts.id, workoutId), eq(workouts.userId, userId)));
+}
+
 export async function getWorkoutWithDetails(userId: string, workoutId: number) {
   const workout = await db
     .select()
