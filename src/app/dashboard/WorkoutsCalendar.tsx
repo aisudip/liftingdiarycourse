@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Workout } from "@/src/db/schema";
 
 function formatDate(date: Date): string {
@@ -32,25 +34,34 @@ function isSameDay(a: Date, b: Date): boolean {
 
 export default function WorkoutsCalendar({ workouts }: { workouts: Workout[] }) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [open, setOpen] = useState(false);
 
   const workoutsForDate = workouts.filter((w) =>
     isSameDay(new Date(w.startedAt), selectedDate)
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-start">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Select Date</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 pb-4 flex justify-center">
+    <div className="flex flex-col gap-6">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline">
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {formatDate(selectedDate)}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={(date) => date && setSelectedDate(date)}
+            onSelect={(date) => {
+              if (date) {
+                setSelectedDate(date);
+                setOpen(false);
+              }
+            }}
           />
-        </CardContent>
-      </Card>
+        </PopoverContent>
+      </Popover>
 
       <Card>
         <CardHeader>
@@ -95,3 +106,4 @@ export default function WorkoutsCalendar({ workouts }: { workouts: Workout[] }) 
     </div>
   );
 }
+
