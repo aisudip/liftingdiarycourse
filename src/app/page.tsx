@@ -1,5 +1,6 @@
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
           Lifting Diary Course
         </span>
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <SignedOut>
             <SignInButton>
               <Button variant="outline">Sign In</Button>
