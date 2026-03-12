@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import { getWorkoutWithDetails } from "@/src/data/workouts";
-import EditWorkoutForm from "./EditWorkoutForm";
+import { getWorkoutWithDetails, getAllExercises } from "@/src/data/workouts";
+import WorkoutLoggerForm from "./WorkoutLoggerForm";
 
 export default async function EditWorkoutPage({
   params,
@@ -15,8 +15,11 @@ export default async function EditWorkoutPage({
   const id = Number(workoutId);
   if (isNaN(id)) redirect("/dashboard");
 
-  const workout = await getWorkoutWithDetails(userId, id);
+  const [workout, allExercises] = await Promise.all([
+    getWorkoutWithDetails(userId, id),
+    getAllExercises(),
+  ]);
   if (!workout) redirect("/dashboard");
 
-  return <EditWorkoutForm workout={workout} />;
+  return <WorkoutLoggerForm workout={workout} allExercises={allExercises} />;
 }

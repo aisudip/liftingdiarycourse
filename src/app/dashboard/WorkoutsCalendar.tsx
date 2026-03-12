@@ -96,6 +96,11 @@ export default function WorkoutsCalendar({ workouts }: { workouts: Workout[] }) 
                         View Details
                       </Link>
                     </Button>
+                    <Button asChild size="sm">
+                      <Link href={`/dashboard/workout/${workout.id}`}>
+                        Edit
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               ))}
